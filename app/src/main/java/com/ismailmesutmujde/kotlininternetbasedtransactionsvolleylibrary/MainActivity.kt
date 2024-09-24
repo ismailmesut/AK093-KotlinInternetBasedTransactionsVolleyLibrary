@@ -15,21 +15,39 @@ class MainActivity : AppCompatActivity() {
 
         // this result was taken from here: https://kasimadalan.pe.hu/kisiler/delete_kisiler.php
 
-        deletePerson()
+        //deletePerson()
+        insertPerson()
     }
 
     fun deletePerson() {
-        val url = "https://kasimadalan.pe.hu/kisiler/delete_kisiler.php"
+        val url = "http://kasimadalan.pe.hu/kisiler/delete_kisiler.php"
 
         val request = object : StringRequest(Method.POST, url, Response.Listener { answer->
             Log.e("Delete Process Answer", answer)
         }, Response.ErrorListener { e -> e.printStackTrace() }) {
             override fun getParams(): MutableMap<String, String>? {
                 val params = HashMap<String, String>()
-                params["kisi_id"] = "380"
+                params["kisi_id"] = "17722"
                 return params
             }
         }
+        Volley.newRequestQueue(this@MainActivity).add(request)
+    }
+
+    fun insertPerson() {
+        val url = "http://kasimadalan.pe.hu/kisiler/insert_kisiler.php"
+
+        val request = object : StringRequest(Method.POST, url, Response.Listener { answer->
+            Log.e("Insert Process Answer", answer)
+        },Response.ErrorListener { e -> e.printStackTrace() }) {
+            override fun getParams(): MutableMap<String, String>? {
+                val params = HashMap<String, String>()
+                params["kisi_ad"] = "ismail2"
+                params["kisi_tel"] = "222222"
+                return params
+            }
+        }
+
         Volley.newRequestQueue(this@MainActivity).add(request)
     }
 }

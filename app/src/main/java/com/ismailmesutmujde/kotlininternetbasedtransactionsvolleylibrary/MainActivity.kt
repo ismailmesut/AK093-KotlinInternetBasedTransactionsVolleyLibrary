@@ -21,7 +21,8 @@ class MainActivity : AppCompatActivity() {
         //deletePerson()
         //insertPerson()
         //updatePerson()
-        allPersons()
+        //allPersons()
+        search()
     }
 
     fun deletePerson() {
@@ -94,6 +95,44 @@ class MainActivity : AppCompatActivity() {
                 e.printStackTrace()
             }
         },Response.ErrorListener { e -> e.printStackTrace() })
+        Volley.newRequestQueue(this@MainActivity).add(request)
+    }
+
+    fun search() {
+        val url = "http://kasimadalan.pe.hu/kisiler/tum_kisiler_arama.php"
+        val request = object : StringRequest(Method.POST, url, Response.Listener { answer->
+
+            Log.e("Search Answer", answer)
+
+            try {
+                val jsonObject = JSONObject(answer)
+                val personsList = jsonObject.getJSONArray("kisiler")
+
+                for(i in 0 until personsList.length()) {
+                    val p = personsList.getJSONObject(i)
+                    val person_id = p.getInt("kisi_id")
+                    val person_name = p.getString("kisi_ad")
+                    val person_phone = p.getString("kisi_tel")
+
+                    Log.e("person_id", person_id.toString())
+                    Log.e("person_name",person_name)
+                    Log.e("person_phone", person_phone)
+                    Log.e("*********","*********")
+                }
+
+            }catch (e: JSONException) {
+                e.printStackTrace()
+            }
+
+        },Response.ErrorListener { e -> e.printStackTrace() }) {
+            override fun getParams(): MutableMap<String, String>? {
+                val params = HashMap<String, String>()
+                //params["kisi_ad"] = "A"
+                params["kisi_ad"] = "ismail"
+                return params
+            }
+        }
+
         Volley.newRequestQueue(this@MainActivity).add(request)
     }
 }
